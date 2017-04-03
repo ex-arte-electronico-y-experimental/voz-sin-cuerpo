@@ -4,6 +4,7 @@ Archivos de scripting y puredata de voz sin cuerpo para raspberry
 
 ## Carga de imagen ##
 
+-   Descargar la imagen desde `http://downloads.element14.com/downloads/cirrus/cirrus_logic_audio_card_all_pi_versions.zip?ICID=CirrusLogicAudio-topMain-firmware&COM=CirrusLogicAudioCard`
 -   Cargar la imagen `cirrus_logic_audio_card_all_pi_versions.img` en una tarjeta SD de más de 4GB.
 -   Soldar en la wolfson cabeceras de altavoces.
 -   Montar la wolfson sobre la raspberry pi 1 B sujeta con la torre de nylon.

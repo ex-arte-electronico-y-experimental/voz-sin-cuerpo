@@ -1,0 +1,27 @@
+#N canvas 17 105 1282 1104 10;
+#X floatatom 699 316 7 0 0 0 - - -;
+#X obj 699 342 delread~ delay1;
+#X obj 699 435 *~;
+#X obj 253 303 loadbang;
+#X obj 253 338 delay 2000;
+#X msg 253 373 \; pd dsp 1;
+#X obj 678 477 dac~ 1 2;
+#X msg 757 364 0.5;
+#X obj 757 264 loadbang;
+#X obj 451 563 delwrite~ delay1 10000;
+#X msg 699 288 9500;
+#X obj 750 420 hsl 128 15 0.01 1 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 0 1;
+#X obj 451 486 adc~ 1;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 2 0 6 0;
+#X connect 2 0 6 1;
+#X connect 3 0 4 0;
+#X connect 4 0 5 0;
+#X connect 7 0 2 1;
+#X connect 8 0 7 0;
+#X connect 8 0 10 0;
+#X connect 10 0 0 0;
+#X connect 11 0 2 1;
+#X connect 12 0 9 0;

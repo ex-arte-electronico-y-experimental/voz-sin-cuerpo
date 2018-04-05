@@ -28,7 +28,7 @@ Archivos de scripting y puredata de voz sin cuerpo para raspberry
 -   **NO** actualizar la distro.
 -   Instalar los siguientes paquetes:
 ```
-lxmusic xmms2 xmms2-plugin-all volumeicon-alsa mpg123 mplayer gnome-alsamixer alsamixergui
+vim cw lxmusic xmms2 xmms2-plugin-all volumeicon-alsa mpg123 mplayer gnome-alsamixer alsamixergui
 ```
 
 ## Comprobaciones previas ##

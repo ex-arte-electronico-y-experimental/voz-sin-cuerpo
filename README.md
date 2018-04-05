@@ -16,6 +16,8 @@ Archivos de scripting y puredata de voz sin cuerpo para raspberry
 
 -   Ejecutar en consola `raspi-config`, modificando las siguientes opciones:
     *   Expandir sistema de archivos.
+    *   Modo de arranque
+        +   Arranque por consola
     *   Internacionalización:
         +   Cambiar locale.
         +   Cambiar zona horaria.
@@ -23,13 +25,14 @@ Archivos de scripting y puredata de voz sin cuerpo para raspberry
     *   Avanzado:
         +   Habilitar SSH.
 -   Reiniciar la raspberry.
-
-## Comprobaciones previas ##
-
--   Podría ser necesario instalar previamente los siguiente paquetes:
+-   **NO** actualizar la distro.
+-   Instalar los siguientes paquetes:
 ```
 lxmusic xmms2 xmms2-plugin-all volumeicon-alsa mpg123 mplayer gnome-alsamixer alsamixergui
 ```
+
+## Comprobaciones previas ##
+
 -   Ejecutar el script `~/Playback_to_Speakers.sh`.
 -   Ejecutar `amixer -Dhw:sndrpiwsp cset name='SPKOUTL Input 1 Volume' 10; amixer -Dhw:sndrpiwsp cset name='SPKOUTR Input 1 Volume' 10`.
 -   Reproducir mediante `lxmusic` cualquiera de los archivos de audio de prueba, han de escucharse.
@@ -41,22 +44,64 @@ lxmusic xmms2 xmms2-plugin-all volumeicon-alsa mpg123 mplayer gnome-alsamixer al
 
 -   Instalar puredata, como root:
     *   `echo "deb http://apt.puredata.info/releases wheezy main" >> /etc/apt/sources.list`.
-    *   `apt-key adv –keyserver keyserver.ubuntu.com –recv-key 9f0fe587374bbe81`.
-    *   `apt-key adv –keyserver keyserver.ubuntu.com –recv-key D63D3D09C39F5EEB`.
+    *   `apt-key adv --keyserver keyserver.ubuntu.com --recv-key 9f0fe587374bbe81`.
+    *   `apt-key adv --keyserver keyserver.ubuntu.com --recv-key D63D3D09C39F5EEB`.
     *   `aptitude update`.
     *   `aptitude install pd-extended`.
--   Ejecutar el patch desde consola `pd-extended -nogui -alsa delay_justmad_compresor.pd`.
+-   Ejecutar el patch desde consola `pd-extended -nogui -alsa <ruta_del_patch>`.
 
 > Ejecutar puredata con interfaz gráfica puede consumir toda la cpu debido a interrupciones recursivas del watchdog.
 
 ## Preparación para producción ##
 
--   Script para arranque automatico
-    *   rutas de audio (`Playback_to_Speakers`; `Record_from_DMIC`)
-    *   volumen (`amixer -Dhw:sndrpiwsp cset name='SPKOUTL Input 1 Volume' 10`; `amixer -Dhw:sndrpiwsp cset name='SPKOUTR Input 1 Volume' 10`)
-    *   patch de pd (`pd-extended -nogui -alsa delay_justmad_compresor.pd`)
-    *   eliminar arranque gráfico
-    *   `cw "rdy"`
+-   Crear nuevo archivo como root en `/etc/init.d/puredata-app` e insertar el siguiente contenido:
+```
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:          puredata-app
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Puredata initscript
+# Description:       This boot script configures the audio
+#                    paths and initializes a puredata patch
+### END INIT INFO
+
+# Author: kwendenarmo <devel@kwendenarmo.es>
+
+case "$1" in
+    start)
+        echo "Starting sound card"
+        sh /home/pi/Playback_to_Speakers.sh
+        sh /home/pi/Record_from_DMIC.sh
+        amixer -Dhw:sndrpiwsp cset name='SPKOUTL Input 1 Volume' 10
+        amixer -Dhw:sndrpiwsp cset name='SPKOUTR Input 1 Volume' 10
+        echo "Starting puredata"
+        pd-extended -nogui -alsa /home/pi/puredada-patch.pd &
+        echo "Starting done"
+        cw "rdy"
+        ;;
+    stop)
+        echo "Stopping puredata"
+        for i in `ps ax | grep -i pd-extended | grep -v grep | awk {'print $1'}`
+        do
+           kill -9 $i
+           echo "Killed PID:$i"
+        done
+        ;;
+    *)
+        echo "Usage: /etc/init.d/puredata-app {start|stop}"
+        exit 1
+        ;;
+esac
+
+exit 0
+```
+-   Dar permisos `sudo chmod 755 /etc/init.d/puredata-app`
+-   Añadir el script a la secuencia de arranque `sudo update-rc.d puredata-app defaults`
+-   Enlazar el patch de puredata en producción a `/home/pi/puredada-patch.pd`.
 
 ## Bibliografía ##
 
@@ -64,3 +109,4 @@ lxmusic xmms2 xmms2-plugin-all volumeicon-alsa mpg123 mplayer gnome-alsamixer al
 -   https://www.element14.com/community/community/raspberry-pi/raspberrypi_projects/blog/2014/04/06/wolfson-audio-project
 -   https://www.element14.com/community/community/raspberry-pi/raspberry-pi-accessories/wolfson_pi/blog/2014/03/14/can-you-hear-the-wolfson-calling-setting-up-and-using-the-wolfson-audio-card
 -   https://www.element14.com/community/docs/DOC-65690?ICID=Pi-Accessories-wolfson-audio-space
+-   http://www.stuffaboutcode.com/2012/06/raspberry-pi-run-program-at-start-up.html

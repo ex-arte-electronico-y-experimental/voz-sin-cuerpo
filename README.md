@@ -26,10 +26,6 @@ Archivos de scripting y puredata de voz sin cuerpo para raspberry
         +   Habilitar SSH.
 -   Reiniciar la raspberry.
 -   **NO** actualizar la distro.
--   Instalar los siguientes paquetes:
-```
-vim cw lxmusic xmms2 xmms2-plugin-all volumeicon-alsa mpg123 mplayer gnome-alsamixer alsamixergui
-```
 
 ## Comprobaciones previas ##
 
@@ -79,9 +75,7 @@ case "$1" in
         amixer -Dhw:sndrpiwsp cset name='SPKOUTL Input 1 Volume' 10
         amixer -Dhw:sndrpiwsp cset name='SPKOUTR Input 1 Volume' 10
         echo "Starting puredata"
-        pd-extended -nogui -alsa /home/pi/puredada-patch.pd &
-        echo "Starting done"
-        cw "rdy"
+        pd-extended -nogui -alsa /home/pi/puredata-patch.pd &
         ;;
     stop)
         echo "Stopping puredata"
@@ -101,7 +95,7 @@ exit 0
 ```
 -   Dar permisos `sudo chmod 755 /etc/init.d/puredata-app`
 -   Añadir el script a la secuencia de arranque `sudo update-rc.d puredata-app defaults`
--   Enlazar el patch de puredata en producción a `/home/pi/puredada-patch.pd`.
+-   Enlazar el patch de puredata en producción a `/home/pi/puredata-patch.pd`.
 
 ## Bibliografía ##
 

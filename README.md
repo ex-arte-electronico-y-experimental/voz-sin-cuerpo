@@ -12,6 +12,8 @@ Archivos de scripting y puredata de voz sin cuerpo para raspberry
 -   Cuando la imagen esté lista, arrancar la raspberry.
 -   Esperar que cargue el entorno de escritorio.
 
+> Backup de la imagen acabada en Dropbox
+
 ## Preparar la imagen ##
 
 -   Ejecutar en consola `raspi-config`, modificando las siguientes opciones:

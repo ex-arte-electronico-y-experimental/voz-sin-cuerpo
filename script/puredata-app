@@ -9,7 +9,7 @@
 # Short-Description: Puredata initscript
 # Description:       This boot script configures the audio
 #                    paths and initializes a puredata patch
-#                    Also schedules the shutdown in n hours
+#                    Also schedules the shutdown in minutes
 ### END INIT INFO
 
 # Author: kwendenarmo <devel@kwendenarmo.es>

@@ -48,6 +48,7 @@ Desde interfaz gráfica:
     *   `apt-key adv --keyserver keyserver.ubuntu.com --recv-key D63D3D09C39F5EEB`.
     *   `aptitude update`.
     *   `aptitude install pd-extended`.
+-   Descargar los patches de pd y los archivos asociados, de haberlos en `~/patches/`.
 -   Ejecutar el patch desde consola `pd-extended -nogui -alsa <ruta_del_patch>`.
 
 > Ejecutar puredata con interfaz gráfica puede consumir toda la cpu debido a interrupciones recursivas del watchdog.

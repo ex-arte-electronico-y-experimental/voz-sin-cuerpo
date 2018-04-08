@@ -1,0 +1,105 @@
+#N canvas 1209 81 1105 1094 10;
+#X msg 429 862 start;
+#X msg 492 864 stop;
+#X obj 411 733 bng 60 250 50 0 empty empty empty 17 7 0 10 -159808
+-1 -1;
+#X obj 411 895 writesf~ 2;
+#X obj 393 642 dac~ 1 2;
+#X obj 428 28 loadbang;
+#X obj 428 56 delay 2000;
+#X msg 428 85 \; pd dsp 1;
+#X msg 428 426 1;
+#X obj 428 363 bng 30 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 398 555 *~;
+#X obj 536 484 hsl 70 15 0 1 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 0 1;
+#X obj 533 436 loadbang;
+#X obj 428 397 delay 500;
+#X obj 396 450 readsf~ 1;
+#X obj 474 450 t b b;
+#X obj 474 427 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X msg 533 460 1;
+#X obj 428 154 bng 100 250 50 0 empty empty empty 17 7 0 10 -4034 -1
+-1;
+#X obj 429 838 pipe 500;
+#X obj 447 477 bng 30 250 50 0 empty empty empty 17 7 0 10 -258113
+-1 -1;
+#X text 389 710 PULSAR PARA GRABAR;
+#X msg 411 808 open mujica_cortazar_HDDM.wav;
+#X obj 717 134 adc~;
+#X obj 720 425 hsl 195 30 0 1 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 0 1;
+#X obj 717 357 nbx 5 50 0 300 0 0 empty empty empty 0 -8 0 40 -4032
+-1 -1 0 256;
+#X obj 717 220 env~ 2048 1024;
+#X obj 717 255 nbx 5 50 0 300 0 0 empty empty empty 0 -8 0 40 -4032
+-1 -1 0 256;
+#X obj 619 246 vu 50 200 empty empty -1 -8 0 8 -66577 -1 1 0;
+#X obj 645 211 pvu~ 100;
+#X msg 396 297 open balbuceosmono1.wav;
+#X obj 109 226 osc~ 1000;
+#X obj 110 301 *~;
+#X obj 196 221 hsl 70 15 0 1 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 0 1;
+#X msg 193 197 1;
+#X msg 231 197 0;
+#X obj 193 61 bng 30 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 193 272 line~;
+#X obj 194 247 pack 0 50;
+#X obj 533 538 line~;
+#X obj 534 510 pack 0 50;
+#X obj 717 322 maxlib/scale 50 60 0 1;
+#X obj 231 123 pipe 5000;
+#X connect 0 0 3 0;
+#X connect 1 0 3 0;
+#X connect 2 0 22 0;
+#X connect 2 0 19 0;
+#X connect 5 0 6 0;
+#X connect 6 0 7 0;
+#X connect 6 0 18 0;
+#X connect 6 0 42 0;
+#X connect 6 0 34 0;
+#X connect 8 0 14 0;
+#X connect 9 0 13 0;
+#X connect 10 0 4 0;
+#X connect 10 0 4 1;
+#X connect 11 0 40 0;
+#X connect 12 0 17 0;
+#X connect 13 0 8 0;
+#X connect 14 0 10 0;
+#X connect 14 1 16 0;
+#X connect 14 1 20 0;
+#X connect 15 0 8 0;
+#X connect 15 1 30 0;
+#X connect 16 0 15 0;
+#X connect 17 0 11 0;
+#X connect 18 0 30 0;
+#X connect 18 0 9 0;
+#X connect 19 0 0 0;
+#X connect 22 0 3 0;
+#X connect 23 0 26 0;
+#X connect 23 0 29 0;
+#X connect 24 0 11 0;
+#X connect 25 0 24 0;
+#X connect 26 0 27 0;
+#X connect 27 0 41 0;
+#X connect 29 0 28 0;
+#X connect 29 0 28 1;
+#X connect 30 0 14 0;
+#X connect 31 0 32 0;
+#X connect 32 0 4 0;
+#X connect 32 0 4 1;
+#X connect 33 0 38 0;
+#X connect 34 0 33 0;
+#X connect 35 0 33 0;
+#X connect 36 0 34 0;
+#X connect 36 0 42 0;
+#X connect 37 0 32 1;
+#X connect 38 0 37 0;
+#X connect 39 0 10 1;
+#X connect 40 0 39 0;
+#X connect 41 0 25 0;
+#X connect 42 0 35 0;

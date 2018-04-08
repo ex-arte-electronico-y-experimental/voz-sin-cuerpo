@@ -1,0 +1,47 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:          puredata-app
+# Required-Start:    $remote_fs
+# Required-Stop:     $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Puredata initscript
+# Description:       This boot script configures the audio
+#                    paths and initializes a puredata patch
+#                    Also schedules the shutdown in n hours
+### END INIT INFO
+
+# Author: kwendenarmo <devel@kwendenarmo.es>
+
+case "$1" in
+    start)
+        echo "Starting sound card"
+        sh /home/pi/Playback_to_Speakers.sh
+        sh /home/pi/Record_from_DMIC.sh
+        amixer -Dhw:sndrpiwsp cset name='SPKOUTL Input 1 Volume' 10
+        amixer -Dhw:sndrpiwsp cset name='SPKOUTR Input 1 Volume' 10
+        echo "Starting puredata"
+        pd-extended -nogui -alsa /home/pi/patches/puredata-patch.pd &
+	echo "Scheduling shutdown"
+	shutdown -h 300 &
+	echo "puredata-app start done"
+        ;;
+    stop)
+        echo "Stopping puredata"
+        for i in `ps ax | grep -i pd-extended | grep -v grep | awk {'print $1'}`
+        do
+           kill -9 $i
+           echo "Killed PID:$i"
+        done
+	echo "Canceling scheduled shutdown"
+	shutdown -c
+	echo "puredata-app stop done"
+        ;;
+    *)
+        echo "Usage: /etc/init.d/puredata-app {start|stop}"
+        exit 1
+        ;;
+esac
+
+exit 0

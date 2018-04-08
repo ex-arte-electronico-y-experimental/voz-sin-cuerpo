@@ -31,6 +31,8 @@ Archivos de scripting y puredata de voz sin cuerpo para raspberry
 
 ## Comprobaciones previas ##
 
+Desde interfaz gráfica:
+
 -   Ejecutar el script `~/Playback_to_Speakers.sh`.
 -   Ejecutar `amixer -Dhw:sndrpiwsp cset name='SPKOUTL Input 1 Volume' 10; amixer -Dhw:sndrpiwsp cset name='SPKOUTR Input 1 Volume' 10`.
 -   Reproducir mediante `lxmusic` cualquiera de los archivos de audio de prueba, han de escucharse.
@@ -52,52 +54,11 @@ Archivos de scripting y puredata de voz sin cuerpo para raspberry
 
 ## Preparación para producción ##
 
--   Crear nuevo archivo como root en `/etc/init.d/puredata-app` e insertar el siguiente contenido:
-```
-#! /bin/sh
-
-### BEGIN INIT INFO
-# Provides:          puredata-app
-# Required-Start:    $remote_fs $syslog
-# Required-Stop:     $remote_fs $syslog
-# Default-Start:     2 3 4 5
-# Default-Stop:      0 1 6
-# Short-Description: Puredata initscript
-# Description:       This boot script configures the audio
-#                    paths and initializes a puredata patch
-### END INIT INFO
-
-# Author: kwendenarmo <devel@kwendenarmo.es>
-
-case "$1" in
-    start)
-        echo "Starting sound card"
-        sh /home/pi/Playback_to_Speakers.sh
-        sh /home/pi/Record_from_DMIC.sh
-        amixer -Dhw:sndrpiwsp cset name='SPKOUTL Input 1 Volume' 10
-        amixer -Dhw:sndrpiwsp cset name='SPKOUTR Input 1 Volume' 10
-        echo "Starting puredata"
-        pd-extended -nogui -alsa /home/pi/puredata-patch.pd &
-        ;;
-    stop)
-        echo "Stopping puredata"
-        for i in `ps ax | grep -i pd-extended | grep -v grep | awk {'print $1'}`
-        do
-           kill -9 $i
-           echo "Killed PID:$i"
-        done
-        ;;
-    *)
-        echo "Usage: /etc/init.d/puredata-app {start|stop}"
-        exit 1
-        ;;
-esac
-
-exit 0
-```
--   Dar permisos `sudo chmod 755 /etc/init.d/puredata-app`
--   Añadir el script a la secuencia de arranque `sudo update-rc.d puredata-app defaults`
--   Enlazar el patch de puredata en producción a `/home/pi/puredata-patch.pd`.
+-   Descargar el script puredata-app como root en `/etc/init.d/puredata-app`.
+-   Editar el script para el tiempo de apagado.
+-   Dar permisos `sudo chmod 755 /etc/init.d/puredata-app`.
+-   Añadir el script a la secuencia de arranque `sudo update-rc.d puredata-app defaults`.
+-   Enlazar el patch de puredata en producción a `/home/pi/patches/puredata-patch.pd`.
 
 ## Bibliografía ##
 
@@ -106,3 +67,4 @@ exit 0
 -   https://www.element14.com/community/community/raspberry-pi/raspberry-pi-accessories/wolfson_pi/blog/2014/03/14/can-you-hear-the-wolfson-calling-setting-up-and-using-the-wolfson-audio-card
 -   https://www.element14.com/community/docs/DOC-65690?ICID=Pi-Accessories-wolfson-audio-space
 -   http://www.stuffaboutcode.com/2012/06/raspberry-pi-run-program-at-start-up.html
+
